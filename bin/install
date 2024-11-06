@@ -53,4 +53,34 @@ link_app_executables() {
     done
 }
 
-install_erlang
+install_erlang_for_windows() {
+    local version=$ASDF_INSTALL_VERSION
+    local zip_name="$ASDF_INSTALL_PATH/otp-$version.zip"
+
+    mkdir -p $ASDF_INSTALL_PATH
+
+    echo "downloading prebuilt otp to $zip_name ..."
+    curl -Lo "$zip_name" "https://github.com/erlang/otp/releases/download/OTP-$version/otp_win64_$version.zip"
+
+    echo "unzipping prebuilt otp to $ASDF_INSTALL_PATH ..."
+    unzip -u "$zip_name" -d "$ASDF_INSTALL_PATH"
+    rm "$zip_name"
+    rm "$ASDF_INSTALL_PATH/vc_redist.exe" || true
+
+    local erts=($ASDF_INSTALL_PATH/erts-*)
+    erts="${erts[0]}"
+    local found_dash=$(echo "$erts" | grep -ob "-")
+    local erts_version=$(basename "$erts")
+    local ini_path="$erts/bin/erl.ini"
+
+    echo """[erlang]
+Bindir=C:\\Users\\$USERNAME\\.asdf\\installs\\erlang\\$version\\$erts_version\\bin
+Progname=erl
+Rootdir=C:\\Users\\$USERNAME\\.asdf\\installs\\erlang\\$version""" >$ini_path
+}
+
+if [ "$OSTYPE" = "msys" ] || [ "$OSTYPE" = "win32" ]; then
+    install_erlang_for_windows
+else
+    install_erlang
+fi
