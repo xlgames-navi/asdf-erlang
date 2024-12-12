@@ -74,9 +74,9 @@ install_erlang_for_windows() {
     local ini_path="$erts/bin/erl.ini"
 
     echo """[erlang]
-Bindir=C:\\Users\\$USERNAME\\.asdf\\installs\\erlang\\$version\\$erts_version\\bin
+Bindir=C:\\\\Users\\\\$USERNAME\\\\.asdf\\\\installs\\\\erlang\\\\$version\\\\$erts_version\\\\bin
 Progname=erl
-Rootdir=C:\\Users\\$USERNAME\\.asdf\\installs\\erlang\\$version""" >$ini_path
+Rootdir=C:\\\\Users\\\\$USERNAME\\\\.asdf\\\\installs\\\\erlang\\\\$version""" >$ini_path
 }
 
 if [ "$OSTYPE" = "msys" ] || [ "$OSTYPE" = "win32" ]; then
